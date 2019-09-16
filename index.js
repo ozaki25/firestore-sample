@@ -10,10 +10,20 @@ admin.initializeApp({
 
 const db = admin.firestore();
 
-const docRef = db.collection('users').doc('alovelace');
-
-const setAda = docRef.set({
+db.collection('users').add({
   first: 'Ada',
   last: 'Lovelace',
   born: 1815,
+  timestamp: admin.firestore.FieldValue.serverTimestamp(),
 });
+
+db.collection('users')
+  .get()
+  .then(snapshot => {
+    snapshot.forEach(doc => {
+      console.log(doc.id, '=>', doc.data());
+    });
+  })
+  .catch(err => {
+    console.log('Error getting documents', err);
+  });
